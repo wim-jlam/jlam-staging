@@ -1,0 +1,305 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   JLAM Design System - Overgenomen van d1-eigenhand
+   ========================================================================== */
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: unset;
+    font-weight: unset;
+  }
+
+  :root {
+    /* JLAM Core Colors */
+    --color-orange: #ffb86e;
+    --color-salmon: #f58266;
+    --color-light-green: #abc98a;
+    --color-dark-green: #334733;
+    --color-cream: #fcf2eb;
+    --color-white: #ffffff;
+    --color-divider: #d4cbc4;
+
+    /* Aandachtsblok specific */
+    --color-aandachtsblok-bg: #ebf6df;
+    --color-aandachtsblok-border: #abc98a;
+
+    /* shadcn/ui semantic colors - mapped to JLAM */
+    --background: 0 0% 100%;
+    --foreground: 120 18% 20%; /* dark-green #334733 */
+
+    --card: 0 0% 100%;
+    --card-foreground: 120 18% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 120 18% 20%;
+
+    --primary: 34 100% 71%; /* orange #ffb86e */
+    --primary-foreground: 120 18% 20%;
+
+    --secondary: 85 36% 66%; /* light-green #abc98a */
+    --secondary-foreground: 120 18% 20%;
+
+    --muted: 25 74% 96%; /* cream #fcf2eb */
+    --muted-foreground: 120 18% 40%;
+
+    --accent: 13 87% 68%; /* salmon #f58266 */
+    --accent-foreground: 120 18% 20%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 85 36% 66%; /* light-green */
+    --input: 214.3 31.8% 91.4%;
+    --ring: 34 100% 71%; /* orange */
+
+    --radius: 0.75rem;
+
+    --success: 85 36% 66%;
+    --warning: 34 100% 71%;
+    --error: 13 87% 68%;
+
+    /* Typography */
+    --font-size-h1: 45px;
+    --font-size-h2: 35px;
+    --font-size-h3: 30px;
+    --font-size-h4: 25px;
+    --font-size-h5: 20px;
+    --font-size-h6: 18px;
+    --line-height-heading: 1.15;
+    --line-height-body: 1.5;
+    --content-max-width: 45.3em;
+  }
+
+  [data-theme='dark'] {
+    --background: 0 0% 0%;
+    --foreground: 210 40% 98%;
+
+    --card: 0 0% 4%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 0, 0%, 15%, 0.8;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+
+    --success: 196 100% 14%;
+    --warning: 34 51% 25%;
+    --error: 10 39% 43%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground min-h-[100vh] flex flex-col;
+  }
+}
+
+html {
+  opacity: 0;
+}
+
+html[data-theme='dark'],
+html[data-theme='light'] {
+  opacity: initial;
+}
+
+/* ==========================================================================
+   JLAM Components - Overgenomen van d1-eigenhand
+   ========================================================================== */
+
+@layer components {
+  /* -------------------------------------------------------------------------
+     Aandachtsblok - JLAM callout/notification box
+     ------------------------------------------------------------------------- */
+  .aandachtsblok,
+  .callout,
+  .infobox {
+    display: flex;
+    gap: 1rem;
+    background-color: var(--color-aandachtsblok-bg, #ebf6df);
+    border-left: 4px solid var(--color-aandachtsblok-border, #abc98a);
+    border-radius: 0 0.75rem 0.75rem 0;
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  .aandachtsblok p,
+  .callout p,
+  .infobox p {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.35;
+  }
+
+  .aandachtsblok p + p,
+  .callout p + p,
+  .infobox p + p {
+    margin-top: 0.5rem;
+  }
+
+  /* -------------------------------------------------------------------------
+     Highlight (orange background)
+     ------------------------------------------------------------------------- */
+  mark,
+  .highlight,
+  .highlight-orange {
+    background-color: rgba(255, 184, 110, 0.25);
+    color: inherit;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.125rem;
+  }
+
+  /* -------------------------------------------------------------------------
+     Tables - JLAM style
+     ------------------------------------------------------------------------- */
+  .prose table,
+  .payload-richtext table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+  }
+
+  .prose td,
+  .prose th,
+  .payload-richtext td,
+  .payload-richtext th {
+    font-size: 0.875rem;
+    padding: 1em;
+    line-height: 1.35;
+    border: 1px dashed var(--color-divider, #d4cbc4);
+  }
+
+  .prose th,
+  .payload-richtext th {
+    background-color: var(--color-light-green, #abc98a);
+    border-color: var(--color-dark-green, #334733);
+    font-weight: 600;
+  }
+
+  .prose tr:nth-child(even),
+  .payload-richtext tr:nth-child(even) {
+    background-color: hsl(26, 16%, 94%);
+  }
+
+  /* -------------------------------------------------------------------------
+     Links - JLAM style (dashed underline)
+     ------------------------------------------------------------------------- */
+  .prose a,
+  .payload-richtext a {
+    color: var(--color-orange, #ffb86e);
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    text-decoration-thickness: 0.05em;
+    text-decoration-color: var(--color-orange, #ffb86e);
+    transition: all 0.3s ease-out;
+  }
+
+  .prose a:hover,
+  .payload-richtext a:hover {
+    text-decoration-style: solid;
+  }
+
+  /* -------------------------------------------------------------------------
+     Blockquote - JLAM style
+     ------------------------------------------------------------------------- */
+  .prose blockquote,
+  .payload-richtext blockquote {
+    border-left: 4px solid var(--color-light-green, #abc98a);
+    padding: 0.75rem 1rem;
+    margin: 2rem 0;
+    font-style: italic;
+  }
+
+  .prose blockquote p,
+  .payload-richtext blockquote p {
+    margin: 0;
+  }
+
+  /* -------------------------------------------------------------------------
+     CTA Card - Clickable card styling
+     ------------------------------------------------------------------------- */
+  .cta-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1.5rem;
+    border: 1px solid var(--color-light-green, #abc98a);
+    border-radius: 0.75rem;
+    background: white;
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+
+  .cta-card:hover {
+    border-color: var(--color-orange, #ffb86e);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+
+  .cta-card h4 {
+    margin-bottom: 0.5rem;
+    color: var(--color-dark-green, #334733);
+  }
+
+  .cta-card:hover h4 {
+    color: var(--color-orange, #ffb86e);
+  }
+
+  .cta-card p {
+    flex-grow: 1;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    color: var(--color-dark-green, #334733);
+    opacity: 0.8;
+  }
+
+  /* -------------------------------------------------------------------------
+     PDF Link Badge
+     ------------------------------------------------------------------------- */
+  .prose a[href$="pdf"]::after,
+  .payload-richtext a[href$="pdf"]::after {
+    content: "PDF";
+    padding: 0.25em 1.25em 0.05em;
+    border-radius: 3em;
+    background-color: var(--color-salmon, #f58266);
+    color: #fff;
+    font-size: 0.55em;
+    font-weight: 600;
+    letter-spacing: 0.075em;
+    display: inline-block;
+    margin-left: 0.75em;
+    line-height: 1.5;
+  }
+
+  .prose a[href$="pdf"]:hover::after,
+  .payload-richtext a[href$="pdf"]:hover::after {
+    background-color: var(--color-orange, #ffb86e);
+  }
+}
