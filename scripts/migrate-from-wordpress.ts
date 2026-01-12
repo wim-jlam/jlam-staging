@@ -370,14 +370,64 @@ function parseHtmlTable(tableHtml: string): SerializedLexicalNode | null {
 }
 
 /**
- * Convert HTML to Lexical editor state with table support
+ * Parse a list (ul/ol) into Lexical list node
+ */
+function parseHtmlList(listHtml: string, isOrdered: boolean): SerializedLexicalNode | null {
+  const doc = parseHtml(listHtml)
+  const items = doc.querySelectorAll('li')
+
+  if (items.length === 0) return null
+
+  const listItems: SerializedLexicalNode[] = []
+  let value = 1
+
+  for (const item of items) {
+    const text = decodeHtmlEntities(item.textContent.trim())
+    if (text) {
+      listItems.push({
+        type: 'listitem',
+        children: [{
+          type: 'paragraph',
+          children: [{ type: 'text', text, version: 1 }],
+          direction: 'ltr',
+          format: '',
+          indent: 0,
+          textFormat: 0,
+          version: 1,
+        }],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        value: value++,
+        version: 1,
+      } as SerializedLexicalNode)
+    }
+  }
+
+  if (listItems.length === 0) return null
+
+  return {
+    type: 'list',
+    listType: isOrdered ? 'number' : 'bullet',
+    start: 1,
+    tag: isOrdered ? 'ol' : 'ul',
+    children: listItems,
+    direction: 'ltr',
+    format: '',
+    indent: 0,
+    version: 1,
+  } as SerializedLexicalNode
+}
+
+/**
+ * Convert HTML to Lexical editor state with table and list support
  */
 function htmlToLexical(html: string): SerializedEditorState {
   const cleanedHtml = cleanWordPressHtml(html)
   const children: SerializedLexicalNode[] = []
 
-  // Split content by tables first, then process each segment
-  const segments = cleanedHtml.split(/(<table[\s\S]*?<\/table>)/gi)
+  // Split content by tables and lists first
+  const segments = cleanedHtml.split(/(<table[\s\S]*?<\/table>|<ul[\s\S]*?<\/ul>|<ol[\s\S]*?<\/ol>)/gi)
 
   for (const segment of segments) {
     if (!segment.trim()) continue
@@ -391,9 +441,27 @@ function htmlToLexical(html: string): SerializedEditorState {
       continue
     }
 
-    // Process non-table content: split by block elements
+    // Check if this segment is an unordered list
+    if (segment.toLowerCase().startsWith('<ul')) {
+      const listNode = parseHtmlList(segment, false)
+      if (listNode) {
+        children.push(listNode)
+      }
+      continue
+    }
+
+    // Check if this segment is an ordered list
+    if (segment.toLowerCase().startsWith('<ol')) {
+      const listNode = parseHtmlList(segment, true)
+      if (listNode) {
+        children.push(listNode)
+      }
+      continue
+    }
+
+    // Process non-table/list content: split by block elements
     const blocks = segment
-      .split(/<\/(?:p|h[1-6]|div|ul|ol|li)>/i)
+      .split(/<\/(?:p|h[1-6]|div)>/i)
       .map(block => block.trim())
       .filter(block => block.length > 0)
 
@@ -411,24 +479,6 @@ function htmlToLexical(html: string): SerializedEditorState {
             direction: 'ltr',
             format: '',
             indent: 0,
-            version: 1,
-          } as SerializedLexicalNode)
-        }
-        continue
-      }
-
-      // Handle list items
-      const listItemMatch = block.match(/<li[^>]*>([\s\S]*)/i)
-      if (listItemMatch) {
-        const text = decodeHtmlEntities(listItemMatch[1].replace(/<[^>]+>/g, '').trim())
-        if (text) {
-          children.push({
-            type: 'listitem',
-            children: [{ type: 'text', text, version: 1 }],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            value: 1,
             version: 1,
           } as SerializedLexicalNode)
         }
@@ -453,9 +503,9 @@ function htmlToLexical(html: string): SerializedEditorState {
         continue
       }
 
-      // Fallback: treat as paragraph
+      // Fallback: treat as paragraph (skip if it looks like list remnants)
       const text = decodeHtmlEntities(block.replace(/<[^>]+>/g, '').trim())
-      if (text) {
+      if (text && !block.includes('<li')) {
         children.push({
           type: 'paragraph',
           children: [{ type: 'text', text, version: 1 }],

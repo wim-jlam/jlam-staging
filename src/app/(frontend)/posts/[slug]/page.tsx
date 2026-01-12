@@ -15,6 +15,9 @@ import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
+export const dynamicParams = true
+export const revalidate = 600
+
 export async function generateStaticParams() {
   try {
     const payload = await getPayload({ config: configPromise })
