@@ -14,7 +14,7 @@ services:
       - PORT=3000
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.jlam-staging.rule=Host(`staging.jeleefstijlalsmedicijn.nl`)"
+      - "traefik.http.routers.jlam-staging.rule=Host(`payload.jlam.nl`)"
       - "traefik.http.routers.jlam-staging.entrypoints=websecure"
       - "traefik.http.routers.jlam-staging.tls=true"
       - "traefik.http.routers.jlam-staging.tls.certresolver=letsencrypt"
