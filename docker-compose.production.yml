@@ -21,12 +21,17 @@ services:
       - "traefik.http.services.jlam-staging.loadbalancer.server.port=3000"
     networks:
       - jlam-network
+    volumes:
+      - media-data:/app/public/media
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+
+volumes:
+  media-data:
 
 networks:
   jlam-network:
