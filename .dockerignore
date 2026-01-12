@@ -23,6 +23,9 @@ playwright-report
 test-results
 blob-report
 
+# Scripts (development only)
+scripts/
+
 # Development
 .env.local
 .env.development
