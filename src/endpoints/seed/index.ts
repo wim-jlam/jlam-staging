@@ -104,7 +104,7 @@ export const seed = async ({
       data: {
         name: 'Demo Author',
         email: 'demo-author@example.com',
-        password: 'password',
+        // No password - using Keycloak SSO
       },
     }),
     payload.create({
