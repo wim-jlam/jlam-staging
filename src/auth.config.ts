@@ -21,7 +21,7 @@ export const authConfig: NextAuthConfig = {
   callbacks: {
     // Ensure the user object includes the Keycloak sub as id
     jwt({ token, profile }) {
-      if (profile) {
+      if (profile?.sub) {
         token.sub = profile.sub
       }
       return token
