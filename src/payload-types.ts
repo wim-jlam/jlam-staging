@@ -200,7 +200,15 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | AuteurReviewerBlock
+    | InhoudsopgaveBlock
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -432,6 +440,39 @@ export interface User {
     | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AuteurReviewerBlock".
+ */
+export interface AuteurReviewerBlock {
+  auteur: string;
+  reviewer?: string | null;
+  reviewerTitel?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'auteurReviewer';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "InhoudsopgaveBlock".
+ */
+export interface InhoudsopgaveBlock {
+  titel?: string | null;
+  /**
+   * Haalt automatisch alle H2 headings op uit de pagina content
+   */
+  autoGenerate?: boolean | null;
+  items?:
+    | {
+        label: string;
+        anchor?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'inhoudsopgave';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1078,6 +1119,8 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
+        auteurReviewer?: T | AuteurReviewerBlockSelect<T>;
+        inhoudsopgave?: T | InhoudsopgaveBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
@@ -1097,6 +1140,34 @@ export interface PagesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AuteurReviewerBlock_select".
+ */
+export interface AuteurReviewerBlockSelect<T extends boolean = true> {
+  auteur?: T;
+  reviewer?: T;
+  reviewerTitel?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "InhoudsopgaveBlock_select".
+ */
+export interface InhoudsopgaveBlockSelect<T extends boolean = true> {
+  titel?: T;
+  autoGenerate?: T;
+  items?:
+    | T
+    | {
+        label?: T;
+        anchor?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
